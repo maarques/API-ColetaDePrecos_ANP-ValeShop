@@ -26,5 +26,5 @@ deploy:
     - main
   image: cdrx/rancher-gitlab-deploy
   script:
-    # Comando 'upgrade' em uma única linha para garantir que funcione
-    - upgrade --environment "Default" --stack "API-Valor-combustivel" --service "API-Valor-combustivel" --new-image "$REGISTRY_ADDRESS/$IMAGE_NAME:latest"
+    # CORREÇÃO FINAL: O nome do serviço é "API", não "API-Valor-combustivel".
+    - upgrade --environment "Default" --stack "API-Valor-combustivel" --service "API" --new-image "$REGISTRY_ADDRESS/$IMAGE_NAME:latest"
