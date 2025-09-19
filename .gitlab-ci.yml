@@ -26,4 +26,4 @@ deploy:
     - main
   image: cdrx/rancher-gitlab-deploy
   script:
-    - upgrade --environment "API-Valor-combustivel" --stack "API-Valor-combustivel" --service "API-Valor-combustivel" --new-image "$REGISTRY_ADDRESS/$IMAGE_NAME:latest"
+    - upgrade --environment "Default" --stack "API-Valor-combustivel" --service "API-Valor-combustivel" --new-image "$REGISTRY_ADDRESS/$IMAGE_NAME:latest"
