@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+httpx
+requests
+beautifulsoup4
+pandas
+openpyxl
+schedule
+oracledb

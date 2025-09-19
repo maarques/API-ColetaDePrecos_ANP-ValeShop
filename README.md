@@ -1,93 +1,90 @@
-# Coleta_Valores_PM
+API de Preços de Combustíveis da ANP
+Este projeto consiste em uma API desenvolvida em Python com o framework FastAPI. Sua principal função é extrair, tratar e disponibilizar os dados mais recentes sobre os preços de combustíveis (Etanol e Gasolina) diretamente do site da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
 
+A aplicação é containerizada com Docker, facilitando sua execução e deployment.
 
+Como Funciona
+O fluxo de operação da API é o seguinte:
 
-## Getting started
+Acesso à Página da ANP: A aplicação acessa a página pública da ANP que lista os levantamentos de preços de combustíveis .
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Web Scraping: Utilizando httpx e BeautifulSoup, o código faz o scraping do conteúdo HTML da página para encontrar o link da planilha de "Preços médios semanais" mais recente.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Download e Leitura da Planilha: Após encontrar o link, a API faz o download do arquivo Excel (.xlsx) em memória.
 
-## Add your files
+Processamento com Pandas: A planilha é lida com a biblioteca pandas . Os dados são então filtrados para exibir apenas as informações referentes a Etanol e Gasolina .
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+Estruturação dos Dados: As colunas de interesse são selecionadas (DATA INICIAL, DATA FINAL, ESTADO, PRODUTO, PREÇO MÉDIO REVENDA) e as datas são formatadas para o padrão dd-mm-AAAA .
 
-```
-cd existing_repo
-git remote add origin https://git.valeshop.com.br/ti/backoffice/valeshop-service-backend/backoffice-valeshop-service-application/coleta_valores_pm.git
-git branch -M main
-git push -uf origin main
-```
+Disponibilização via API: Os dados tratados são expostos através de um endpoint no formato JSON.
 
-## Integrate with your tools
+Endpoint da API
+GET /precos
+Este endpoint aciona o processo de busca e tratamento dos dados e retorna as informações em formato JSON.
 
-- [ ] [Set up project integrations](https://git.valeshop.com.br/ti/backoffice/valeshop-service-backend/backoffice-valeshop-service-application/coleta_valores_pm/-/settings/integrations)
+Resposta em caso de sucesso:
 
-## Collaborate with your team
+JSON
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+{
+  "status": "ok",
+  "dados": [
+    {
+      "DATA INICIAL": "14-09-2025",
+      "DATA FINAL": "20-09-2025",
+      "ESTADO": "SAO PAULO",
+      "PRODUTO": "GASOLINA COMUM",
+      "PREÇO MÉDIO REVENDA": 5.75
+    },
+    {
+      "DATA INICIAL": "14-09-2025",
+      "DATA FINAL": "20-09-2025",
+      "ESTADO": "SAO PAULO",
+      "PRODUTO": "ETANOL HIDRATADO",
+      "PREÇO MÉDIO REVENDA": 3.89
+    }
+  ]
+}
+Resposta em caso de erro (ex: link não encontrado):
 
-## Test and Deploy
+JSON
 
-Use the built-in continuous integration in GitLab.
+{
+  "status": "erro",
+  "mensagem": "Nenhum link encontrado."
+}
+Tecnologias Utilizadas
+Backend: Python 3.13 , FastAPI .
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Servidor ASGI: Uvicorn .
 
-***
+Requisições HTTP: httpx .
 
-# Editing this README
+Web Scraping: BeautifulSoup4 .
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Manipulação de Dados: Pandas, openpyxl .
 
-## Suggestions for a good README
+Containerização: Docker.
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Como Executar o Projeto
+Pré-requisitos
+Docker e Docker Compose instalados.
 
-## Name
-Choose a self-explaining name for your project.
+Execução com Docker
+Clone o repositório:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Bash
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+git clone <url-do-seu-repositorio>
+cd <nome-do-repositorio>
+Construa a imagem Docker:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Bash
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+docker build -t anp-fuel-api .
+Execute o container:
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Bash
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+docker run -p 8000:8000 anp-fuel-api
+A API estará disponível no endereço: http://localhost:8000/precos
