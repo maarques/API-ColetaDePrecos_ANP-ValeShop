@@ -36,7 +36,7 @@ POST /atualizar
 Dispara o processo de web scraping para buscar os dados mais recentes no site da ANP. Ele limpa a tabela existente (TRUNCATE) e a repopula com os novos dados.
 
 Exemplo de Resposta (Sucesso):
-
+'''
 JSON
 
 {
@@ -70,6 +70,7 @@ JSON
     }
   ]
 }
+'''
 ⚙️ Como Executar o Projeto Localmente
 Pré-requisitos:
 
