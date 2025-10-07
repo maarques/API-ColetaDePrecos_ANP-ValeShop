@@ -47,7 +47,7 @@ GET /precos
 Retorna todos os registros de preços de combustíveis atualmente armazenados no banco de dados.
 
 Exemplo de Resposta:
-
+```
 JSON
 
 {
@@ -70,7 +70,7 @@ JSON
     }
   ]
 }
-'''
+```
 ⚙️ Como Executar o Projeto Localmente
 Pré-requisitos:
 
