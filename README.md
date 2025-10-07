@@ -1,33 +1,59 @@
-API de Preços de Combustíveis da ANP
-Este projeto consiste em uma API desenvolvida em Python com o framework FastAPI. Sua principal função é extrair, tratar e disponibilizar os dados mais recentes sobre os preços de combustíveis (Etanol e Gasolina) diretamente do site da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
+⛽ API de Coleta de Preços de Combustíveis - ANP
+<p align="center">
+<img src="https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.13"/>
+<img src="https://img.shields.io/badge/FastAPI-0.103.2-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"/>
+<img src="https://img.shields.io/badge/Docker-24.0-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
+<img src="https://img.shields.io/badge/PostgreSQL-15-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+</p>
 
-A aplicação é containerizada com Docker, facilitando sua execução e deployment.
+API para extração e consulta de dados semanais sobre preços de combustíveis, coletados diretamente do site da Agência Nacional do Petróleo, Gás Natural e Biocombustíveis (ANP).
 
-Como Funciona
-O fluxo de operação da API é o seguinte:
+O projeto utiliza web scraping para obter a planilha mais recente, processa os dados com Pandas e os armazena em um banco de dados PostgreSQL, disponibilizando-os através de endpoints REST.
 
-Acesso à Página da ANP: A aplicação acessa a página pública da ANP que lista os levantamentos de preços de combustíveis .
+✨ Principais Funcionalidades
+Web Scraping Automatizado: Busca e faz o download da planilha de preços mais recente da ANP.
 
-Web Scraping: Utilizando httpx e BeautifulSoup, o código faz o scraping do conteúdo HTML da página para encontrar o link da planilha de "Preços médios semanais" mais recente.
+Processamento Inteligente: Utiliza Pandas para filtrar e tratar os dados de forma eficiente.
 
-Download e Leitura da Planilha: Após encontrar o link, a API faz o download do arquivo Excel (.xlsx) em memória.
+Armazenamento Robusto: Persiste os dados em um banco de dados PostgreSQL.
 
-Processamento com Pandas: A planilha é lida com a biblioteca pandas . Os dados são então filtrados para exibir apenas as informações referentes a Etanol e Gasolina .
+API Rápida: Disponibiliza os dados através de endpoints FastAPI assíncronos.
 
-Estruturação dos Dados: As colunas de interesse são selecionadas (DATA INICIAL, DATA FINAL, ESTADO, PRODUTO, PREÇO MÉDIO REVENDA) e as datas são formatadas para o padrão dd-mm-AAAA .
+Containerizado: Pronto para rodar em qualquer ambiente com Docker.
 
-Disponibilização via API: Os dados tratados são expostos através de um endpoint no formato JSON.
+🚀 Tecnologias Utilizadas
+<p align="center">
+<a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a>
+<a href="https://fastapi.tiangolo.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg" alt="fastapi" width="40" height="40"/> </a>
+<a href="https://www.docker.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="40" height="40"/> </a>
+<a href="https://www.postgresql.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original-wordmark.svg" alt="postgresql" width="40" height="40"/> </a>
+<a href="https://pandas.pydata.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/pandas/pandas-original-wordmark.svg" alt="pandas" width="40" height="40"/> </a>
+<a href="https://www.sqlalchemy.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlalchemy/sqlalchemy-original.svg" alt="sqlalchemy" width="40" height="40"/> </a>
+<a href="https://about.gitlab.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/gitlab/gitlab-original-wordmark.svg" alt="gitlab" width="40" height="40"/> </a>
+</p>
 
-Endpoint da API
-GET /precos
-Este endpoint aciona o processo de busca e tratamento dos dados e retorna as informações em formato JSON.
+📝 Endpoints da API
+POST /atualizar
+Dispara o processo de web scraping para buscar os dados mais recentes no site da ANP. Ele limpa a tabela existente (TRUNCATE) e a repopula com os novos dados.
 
-Resposta em caso de sucesso:
+Exemplo de Resposta (Sucesso):
 
 JSON
 
 {
   "status": "ok",
+  "mensagem": "150 registros inseridos"
+}
+GET /precos
+Retorna todos os registros de preços de combustíveis atualmente armazenados no banco de dados.
+
+Exemplo de Resposta:
+
+JSON
+
+{
+  "status": "ok",
+  "total": 2,
   "dados": [
     {
       "DATA INICIAL": "14-09-2025",
@@ -45,46 +71,26 @@ JSON
     }
   ]
 }
-Resposta em caso de erro (ex: link não encontrado):
+⚙️ Como Executar o Projeto Localmente
+Pré-requisitos:
 
-JSON
+Docker
 
-{
-  "status": "erro",
-  "mensagem": "Nenhum link encontrado."
-}
-Tecnologias Utilizadas
-Backend: Python 3.13 , FastAPI .
+Docker Compose
 
-Servidor ASGI: Uvicorn .
+Passos para Execução:
 
-Requisições HTTP: httpx .
-
-Web Scraping: BeautifulSoup4 .
-
-Manipulação de Dados: Pandas, openpyxl .
-
-Containerização: Docker.
-
-Como Executar o Projeto
-Pré-requisitos
-Docker e Docker Compose instalados.
-
-Execução com Docker
 Clone o repositório:
 
 Bash
 
 git clone <url-do-seu-repositorio>
 cd <nome-do-repositorio>
-Construa a imagem Docker:
+Inicie os containers com Docker Compose:
+Este comando irá construir a imagem da API e iniciar os serviços da API e do banco de dados.
 
 Bash
 
-docker build -t anp-fuel-api .
-Execute o container:
-
-Bash
-
-docker run -p 8000:8000 anp-fuel-api
-A API estará disponível no endereço: http://localhost:8000/precos
+docker-compose up --build
+Acesse a API:
+A API estará disponível em http://localhost:8000. Você pode acessar a documentação interativa (Swagger UI) em http://localhost:8000/docs.
