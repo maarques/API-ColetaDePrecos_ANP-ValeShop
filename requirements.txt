@@ -7,3 +7,5 @@ pandas
 openpyxl
 schedule
 oracledb
+sqlalchemy
+asyncpg
