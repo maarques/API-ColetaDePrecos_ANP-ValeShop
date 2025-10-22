@@ -71,7 +71,7 @@ JSON
   ]
 }
 
-## ⚙️ Como Executar o Projeto Localmente
+⚙️ Como Executar o Projeto Localmente
 Pré-requisitos:
 
 Docker
@@ -82,14 +82,14 @@ Passos para Execução:
 
 Clone o repositório:
 
-```Bash
+Bash```
 
 git clone <url-do-seu-repositorio>
 cd <nome-do-repositorio>
 Inicie os containers com Docker Compose:
 Este comando irá construir a imagem da API e iniciar os serviços da API e do banco de dados.
 ```
-```Bash
+Bash```
 
 docker-compose up --build
 Acesse a API:
