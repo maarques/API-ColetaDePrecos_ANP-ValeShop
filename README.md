@@ -83,6 +83,7 @@ Passos para Execução:
 Clone o repositório:
 
 ```
+bash
 git clone <url-do-seu-repositorio>
 cd <nome-do-repositorio>
 Inicie os containers com Docker Compose:
@@ -90,6 +91,7 @@ Este comando irá construir a imagem da API e iniciar os serviços da API e do b
 ```
 
 ```
+bash
 docker-compose up --build
 Acesse a API:
 A API estará disponível em http://localhost:8000. Você pode acessar a documentação interativa (Swagger UI) em http://localhost:8000/docs.
